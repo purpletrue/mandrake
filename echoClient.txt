@@ -1,0 +1,42 @@
+package popcorn03;
+
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
+
+// git SSH, id_rsa 1번째 커밋 시 기록 --
+// git SSH, id_rsa.pub 2번째 커밋 시 기록 --
+// git SSH, 1:1 echo Server/Client 3번째 커밋 시 기록 --
+
+public class EchoClient {
+    public static void main (String[] args) throws IOException {
+        Socket client = null;
+        PrintWriter out = null;
+
+        try {
+            client = new Socket();
+            System.out.println("echo Server 연결 시도.....");
+            client.connect(new InetSocketAddress("localhost", 5000), 3000);
+            System.out.println("echo Server 연결 성공.....");
+        } catch (Exception e) {
+        }
+
+        out = new PrintWriter(client.getOutputStream(), true);
+
+        Scanner in = new Scanner(System.in);
+        String msg;
+
+        System.out.print("보낼 메시지가 있나요? ");
+        while ((msg = in.nextLine()) != null) {
+            if (msg.contains("bye"))
+                break;
+            out.println(msg);
+            System.out.print("보낼 메시지가 더 있나요? ");
+        }
+
+        System.out.println("Client Out!");
+        out.close();
+        in.close();
+        client.close();
+    }
+}
